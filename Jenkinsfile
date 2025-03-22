@@ -8,7 +8,7 @@ pipeline {
                     if (env.BRANCH_NAME != 'release') {
                         echo "Not on release branch (${env.BRANCH_NAME}), skipping build steps."
                         // Optionally, you can set the build result to SUCCESS or NOT_BUILT.
-                        currentBuild.result = 'SUCCESS'
+                        currentBuild.result = 'NOT_BUILT'
                         return
                     }
                 }
