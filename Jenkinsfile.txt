@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Validate Branch') {
+            // This stage ensures that the build is running in the release branch.
+            when {
+                expression { env.BRANCH_NAME == 'release' }
+            }
+            steps {
+                echo "Confirmed running on release branch: ${env.BRANCH_NAME}"
+            }
+        }
+        stage('Build') {
+            when {
+                expression { env.BRANCH_NAME == 'release' }
+            }
+            steps {
+                echo "Pull request merged into release. Proceeding with build..."
+                // Add your build, test, or deployment steps here.
+            }
+        }
+    }
+}
