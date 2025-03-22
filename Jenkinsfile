@@ -1,21 +1,27 @@
 pipeline {
     agent any
     stages {
-        stage('Validate Branch') {
-            when {
-                expression { env.BRANCH_NAME == 'release' }
-            }
+        stage('Check Branch') {
             steps {
-                echo "Confirmed running on release branch: ${env.BRANCH_NAME}"
+                script {
+                    // Early exit: if not on release branch, skip the rest of the pipeline
+                    if (env.BRANCH_NAME != 'release') {
+                        echo "Not on release branch (${env.BRANCH_NAME}), skipping build steps."
+                        // Optionally, you can set the build result to SUCCESS or NOT_BUILT.
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+                }
             }
         }
         stage('Build') {
+            // Alternatively, you can also use the when block to guard individual stages:
             when {
                 expression { env.BRANCH_NAME == 'release' }
             }
             steps {
                 echo "Pull request merged into release. Proceeding with build..."
-                // Insert build steps here.
+                // Add your build, test, and deployment steps here.
             }
         }
     }
